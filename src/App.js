@@ -21,7 +21,7 @@ function App() {
 
   }, []);
 
-  const seePrev = () => {
+  const seePrev = (prev) => {
     api.get(prev).then(res => {
       setPokemons(res.data.results);
       setPrev(res.data.previous);
@@ -29,7 +29,7 @@ function App() {
     })
   }
 
-  const seeNext = () => {
+  const seeNext = (next) => {
      api.get(next).then(res => {
       setPokemons(res.data.results);
       setPrev(res.data.previous);
@@ -37,32 +37,31 @@ function App() {
     })
   }
 
-  // const buildImgUrl = (url) => {
-  //   const id = url.split("/");
-  //   const idx = id.length - 2;
-  //   const imgUrl = `https://raw.githubusercontent.com/pokeAPI/sprites/master/sprites/pokemon/${id[idx]}.png`
+  const buildImgUrl = (url) => {
+    const id = url.split("/");
+    const idx = id.length - 2;
+    const imgUrl = `https://raw.githubusercontent.com/pokeAPI/sprites/master/sprites/pokemon/${id[idx]}.png`
   
-  //   return imgUrl;
-  // };
+    return imgUrl;
+  };
   
-
   return (
     <div className="container">
       <div className="pokemon-container">
-        <div>
+       
           {
             pokemons.map((pokemon) => (
               <div key={pokemon.name} className='pokemon'>
-              <img src={ pokemon.sprites } alt={ pokemon.name }/>
+              <img src={ buildImgUrl(pokemon.url) } alt={ pokemon.name }/>
                 <p>{ pokemon.name }</p>
               </div>
             ))
           }
-        </div>
+        
       </div>
       <div className="buttons-container">
-        <button onClick={() => seePrev()}>Ver Anteriores</button>
-        <button onClick={() => seeNext()}>Ver Próximos</button>
+        <button onClick={() => seePrev(prev)} disabled={ prev === null ? true : false } className= { prev === null ? "btn-disabled" : "" }>Ver Anteriores</button>
+        <button onClick={() => seeNext(next)} disabled={ next === null ? true : false } className= { next === null ? "btn-disabled" : "" }>Ver Próximos</button>
       </div>
   </div>
   );
